@@ -61,7 +61,7 @@ public class Matiere implements Serializable {
     @Size(max = 255)
     @Column(length = 255)
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "matiere")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "matiere",orphanRemoval = true)
     private Collection<AffectationEnseignant> affectationenseignants;
     @JoinColumn(name = "UNITEID", referencedColumnName = "UNITEID", nullable = false)
     @ManyToOne(optional = false)

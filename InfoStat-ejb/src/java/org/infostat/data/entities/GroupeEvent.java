@@ -80,7 +80,7 @@ public class GroupeEvent implements Serializable {
     @JoinColumn(name = "AFFPROFID", referencedColumnName = "AFFPROFID", nullable = false)
     @ManyToOne(optional = false)
     private AffectationEnseignant affectationenseignant;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupevent")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupevent",orphanRemoval = true)
     private Collection<EtudiantEvent> etudiantevents;
 
     public GroupeEvent() {

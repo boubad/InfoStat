@@ -66,8 +66,8 @@ public class Enseignant implements Serializable {
     @Column(length = 256)
     private String description;
     @Lob
-    private Serializable photodata;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enseignant")
+    private byte[] photodata;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enseignant",orphanRemoval = true)
     private Collection<AffectationEnseignant> affectationenseignants;
 
     public Enseignant() {
@@ -148,11 +148,11 @@ public class Enseignant implements Serializable {
         this.description = description;
     }
 
-    public Serializable getPhotodata() {
+    public byte[] getPhotodata() {
         return photodata;
     }
 
-    public void setPhotodata(Serializable photodata) {
+    public void setPhotodata(byte[] photodata) {
         this.photodata = photodata;
     }
 

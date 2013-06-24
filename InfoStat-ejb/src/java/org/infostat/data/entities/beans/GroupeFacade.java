@@ -26,5 +26,20 @@ public class GroupeFacade extends AbstractFacade<Groupe> implements GroupeFacade
     public GroupeFacade() {
         super(Groupe.class);
     }
+
+    @Override
+    public void create(Groupe entity) {
+        super.create(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void edit(Groupe entity) {
+        super.edit(entity); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void remove(Groupe entity) {
+        super.remove(entity); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

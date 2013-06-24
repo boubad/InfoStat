@@ -41,7 +41,8 @@ public class AffectationEnseignant implements Serializable {
     @Version
     @Column(name="OPTLOCK")
     private Integer version;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "affectationenseignant")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "affectationenseignant")
     private Collection<GroupeEvent> groupeevents;
     @JoinColumn(name = "SEMESTREID", referencedColumnName = "SEMESTREID", nullable = false)
     @ManyToOne(optional = false)

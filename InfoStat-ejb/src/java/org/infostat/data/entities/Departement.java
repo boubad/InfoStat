@@ -68,11 +68,11 @@ public class Departement implements Serializable {
     @Size(max = 255)
     @Column(name = "DESCRIPTION", length = 255)
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departement")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departement",orphanRemoval = true)
     private Collection<Groupe> groupes;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departement")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departement",orphanRemoval = true)
     private Collection<Unite> unites;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departement")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departement",orphanRemoval = true)
     private Collection<Annee> annees;
 
     public Departement() {

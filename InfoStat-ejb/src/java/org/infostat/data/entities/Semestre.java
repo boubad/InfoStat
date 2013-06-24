@@ -67,9 +67,9 @@ public class Semestre implements Serializable {
     @Size(max = 255)
     @Column(length = 255)
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestre")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestre",orphanRemoval = true)
     private Collection<AffectationEnseignant> affectationenseignants;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestre")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestre",orphanRemoval = true)
     private Collection<AffectationEtudiant> affectationetudiants;
     @JoinColumn(name = "ANNEEID", referencedColumnName = "ANNEEID", nullable = false)
     @ManyToOne(optional = false)

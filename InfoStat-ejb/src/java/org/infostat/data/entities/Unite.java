@@ -56,7 +56,7 @@ public class Unite implements Serializable {
     private String description;
     @Column(name = "MORDER")
     private Integer order;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "unite")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "unite",orphanRemoval = true)
     private Collection<Matiere> matieres;
     @JoinColumn(name = "DEPARTEMENTID", referencedColumnName = "DEPARTEMENTID", nullable = false)
     @ManyToOne(optional = false)

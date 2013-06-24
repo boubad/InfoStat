@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -31,6 +33,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "DBGROUPE", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"DEPARTEMENTID", "SIGLE"})})
+@NamedQueries(
+        {
+    @NamedQuery(name = "Groupe.findByDepartement",
+            query = "SELECT a from Groupe a WHERE  a.departement.id=:id"),
+    @NamedQuery(name = "Groupe.findByDepartementSigle",
+            query = "SELECT a from Groupe a WHERE  a.departement.id=:id ABD a.sigle=:sigle")
+})
 @XmlRootElement
 public class Groupe implements Serializable {
 
@@ -58,12 +67,12 @@ public class Groupe implements Serializable {
     @Size(max = 255)
     @Column(length = 255)
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupe",orphanRemoval = true)
     private Collection<AffectationEnseignant> affectationenseignants;
     @JoinColumn(name = "DEPARTEMENTID", referencedColumnName = "DEPARTEMENTID", nullable = false)
     @ManyToOne(optional = false)
     private Departement departement;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupe",orphanRemoval = true)
     private Collection<AffectationEtudiant> affectationetudiants;
 
     public Groupe() {

@@ -27,6 +27,7 @@ import org.infostat.data.entities.beans.AnneeFacadeLocal;
 @Stateless
 @Path("annee")
 public class AnneeResource extends BaseDataBean {
+
     @EJB
     private AnneeFacadeLocal anneeFacade;
 
@@ -55,12 +56,21 @@ public class AnneeResource extends BaseDataBean {
     }
 
     @GET
+    @Path("{id}")
+    @Produces({"application/xml", "application/json"})
+    public AnneeDTO find(@PathParam("id") Long id) {
+        Annee p = anneeFacade.find(id);
+        return convertAnnee(p);
+    }
+
+    @GET
     @Produces({"application/xml", "application/json"})
     public List<AnneeDTO> findAll() {
         List<Annee> oList = anneeFacade.findAll();
         List<AnneeDTO> oRet = new ArrayList<AnneeDTO>();
         for (Annee p : oList) {
             AnneeDTO pp = convertAnnee(p);
+            oRet.add(pp);
         }
         return oRet;
     }
@@ -73,6 +83,7 @@ public class AnneeResource extends BaseDataBean {
         List<AnneeDTO> oRet = new ArrayList<AnneeDTO>();
         for (Annee p : oList) {
             AnneeDTO pp = convertAnnee(p);
+            oRet.add(pp);
         }
         return oRet;
     }
@@ -86,6 +97,7 @@ public class AnneeResource extends BaseDataBean {
         List<AnneeDTO> oRet = new ArrayList<AnneeDTO>();
         for (Annee p : oList) {
             AnneeDTO pp = convertAnnee(p);
+            oRet.add(pp);
         }
         return oRet;
     }

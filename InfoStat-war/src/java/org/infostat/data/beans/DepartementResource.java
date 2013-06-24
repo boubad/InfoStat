@@ -6,17 +6,13 @@ package org.infostat.data.beans;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.DELETE;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -33,7 +29,8 @@ import org.infostat.data.entities.beans.DepartementFacadeLocal;
 @Path("departement")
 public class DepartementResource extends BaseDataBean {
 
-    DepartementFacadeLocal departementFacade = lookupDepartementFacadeLocal();
+    @EJB
+    private DepartementFacadeLocal departementFacade;
 
     /**
      * Creates a new instance of DepartementResource
@@ -64,11 +61,27 @@ public class DepartementResource extends BaseDataBean {
 
     @GET
     @Produces({"application/xml", "application/json"})
+    @Path("{id}")
+    public DepartementDTO find(@PathParam("id") Long id) {
+        Departement p = departementFacade.find(id);
+        return convertDepartement(p);
+    }
+    @GET
+    @Produces({"application/xml", "application/json"})
+    @Path("sigle/{sigle}")
+    public DepartementDTO findBySigle(@PathParam("sigle") String sigle) {
+        Departement p = departementFacade.findBySigle(sigle);
+        return convertDepartement(p);
+    }
+
+    @GET
+    @Produces({"application/xml", "application/json"})
     public List<DepartementDTO> findAll() {
         List<Departement> oList = departementFacade.findAll();
         List<DepartementDTO> oRet = new ArrayList<DepartementDTO>();
         for (Departement p : oList) {
             DepartementDTO pp = convertDepartement(p);
+            oRet.add(pp);
         }
         return oRet;
     }
@@ -81,6 +94,7 @@ public class DepartementResource extends BaseDataBean {
         List<DepartementDTO> oRet = new ArrayList<DepartementDTO>();
         for (Departement p : oList) {
             DepartementDTO pp = convertDepartement(p);
+            oRet.add(pp);
         }
         return oRet;
     }
@@ -92,15 +106,5 @@ public class DepartementResource extends BaseDataBean {
         int nRet = departementFacade.count();
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
-    }
-
-    private DepartementFacadeLocal lookupDepartementFacadeLocal() {
-        try {
-            Context c = new InitialContext();
-            return (DepartementFacadeLocal) c.lookup("java:global/InfoStat/InfoStat-ejb/DepartementFacade!org.infostat.data.entities.beans.DepartementFacadeLocal");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
     }
 }

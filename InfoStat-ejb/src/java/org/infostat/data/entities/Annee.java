@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @UniqueConstraint(columnNames = {"DEPARTEMENTID", "DSTART"})})
 @NamedQueries(
         @NamedQuery(name="Annee.findByDepartement",
-        query = "SELECT a FROM Annee a WHERE a.departement.id = :id ORDER BY a.startdate DESC")
+        query = "SELECT a FROM Annee a WHERE a.departement.id = :id")
         )
 @XmlRootElement
 public class Annee implements Serializable {
@@ -75,7 +75,7 @@ public class Annee implements Serializable {
     @Size(max = 255)
     @Column(name="DESCRIPTION",length = 255)
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annee")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annee",orphanRemoval = true)
     private Collection<Semestre> semestres;
     @JoinColumn(name = "DEPARTEMENTID", referencedColumnName = "DEPARTEMENTID", nullable = false)
     @ManyToOne(optional = false)
