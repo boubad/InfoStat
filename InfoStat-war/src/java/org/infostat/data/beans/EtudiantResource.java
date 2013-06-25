@@ -77,7 +77,7 @@ public class EtudiantResource extends BaseDataBean {
     @Produces({"application/xml", "application/json"})
     @Path("user")
     public List<EtudiantDTO> findByLastnameFirstname(@QueryParam("lastname") String lastname,
-            @QueryParam("lastname") String firstname) {
+            @QueryParam("firstname") String firstname) {
         List<Etudiant> oList = facade.findByLastnameFirstname(lastname, firstname);
         List<EtudiantDTO> oRet = new ArrayList<EtudiantDTO>();
         for (Etudiant p : oList) {

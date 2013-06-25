@@ -120,7 +120,7 @@ public class MatiereResource extends BaseDataBean {
     @Path("user")
     @Produces({"application/xml", "application/json"})
     public List<MatiereDTO> findByUniteSigle(@QueryParam("id") Integer id,
-            @QueryParam("id") String sigle) {
+            @QueryParam("sigle") String sigle) {
         List<Matiere> oList = facade.findByUniteSigle(id, sigle);
         List<MatiereDTO> oRet = new ArrayList<MatiereDTO>();
         for (Matiere p : oList) {
