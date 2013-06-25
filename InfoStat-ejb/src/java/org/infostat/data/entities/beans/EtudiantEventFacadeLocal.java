@@ -31,10 +31,12 @@ public interface EtudiantEventFacadeLocal {
 
     List<EtudiantEvent> findByGroupeEvent(Integer evtid);
 
-    List<EtudiantEvent> findBySemestreGenre(Integer semestreid,String genre);
+    List<EtudiantEvent> findBySemestreGenre(Integer semestreid, String genre);
 
     List<EtudiantEvent> findByEtudiant(Integer etudiantid);
 
     List<EtudiantEvent> findByEtudiantGroupeEventGenre(Integer etudiantid,
             Integer evtid, String genre);
+
+    void maintains(List<EtudiantEvent> oList,boolean bDelete);
 }

@@ -86,4 +86,31 @@ public class EtudiantEventFacade extends AbstractFacade<EtudiantEvent> implement
         q.setParameter("genre", genre);
         return q.getResultList();
     }
+
+    @Override
+    public void maintains(List<EtudiantEvent> oList, boolean bDelete) {
+        if (oList == null) {
+            return;
+        }
+        for (EtudiantEvent entity : oList) {
+            if (entity != null) {
+                EtudiantEvent p = null;
+                Long nId = entity.getId();
+                if (nId != null) {
+                    p = em.find(EtudiantEvent.class, nId);
+                }
+                if (p != null) {
+                    if (bDelete) {
+                        super.edit(entity);
+                    } else {
+                        super.remove(entity);
+                    }
+                } else {
+                    if (!bDelete) {
+                        super.create(entity);
+                    }
+                }
+            }// entity
+        }// entity
+    }// maintains
 }

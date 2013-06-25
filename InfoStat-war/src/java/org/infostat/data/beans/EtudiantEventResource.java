@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.infostat.data.dto.EtudiantEventDTO;
+import org.infostat.data.dto.EtudiantEventsList;
 import org.infostat.data.entities.EtudiantEvent;
 import org.infostat.data.entities.beans.EtudiantEventFacadeLocal;
 
@@ -133,4 +134,33 @@ public class EtudiantEventResource extends BaseDataBean {
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
     }
+
+    @POST
+    @Path("user")
+    @Consumes({"application/xml", "application/json"})
+    public void maintains(EtudiantEventsList oList) {
+        if (oList != null) {
+            String mode = oList.getOperation();
+            boolean bDelete = false;
+            if (mode != null) {
+                mode = mode.toLowerCase();
+                if (mode.contains("delete")) {
+                    bDelete = true;
+                }
+            }
+            List<EtudiantEvent> xList = new ArrayList<EtudiantEvent>();
+            EtudiantEventDTO[] col = oList.getEvents();
+            if (col != null) {
+                for (EtudiantEventDTO p : col) {
+                    EtudiantEvent pp = convertEtudiantEvent(p);
+                    if (pp != null){
+                        xList.add(pp);
+                    }
+                }// p
+            }// col
+            if (!xList.isEmpty()) {
+                facade.maintains(xList, bDelete);
+            }
+        }// oList
+    }// Create
 }
