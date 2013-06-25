@@ -28,5 +28,8 @@ public interface GroupeFacadeLocal {
     List<Groupe> findRange(int[] range);
 
     int count();
-    
+
+    List<Groupe> findByDepartementId(Integer depId);
+
+    List<Groupe> findByDepartementSigle(Integer depId,String sigle);
 }

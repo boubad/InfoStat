@@ -28,5 +28,6 @@ public interface EtudiantFacadeLocal {
     List<Etudiant> findRange(int[] range);
 
     int count();
-    
+
+    List<Etudiant> findByLastnameFirstname(String lastname, String firstname);
 }

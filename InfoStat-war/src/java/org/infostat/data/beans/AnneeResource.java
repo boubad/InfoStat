@@ -105,7 +105,7 @@ public class AnneeResource extends BaseDataBean {
     @GET
     @Path("count")
     @Produces({"text/plain", "application/xml", "application/json"})
-    public String countREST() {
+    public String count() {
         int nRet = anneeFacade.count();
         return String.valueOf(nRet);
         //return String.valueOf(super.count());

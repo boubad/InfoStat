@@ -28,5 +28,10 @@ public interface MatiereFacadeLocal {
     List<Matiere> findRange(int[] range);
 
     int count();
-    
+
+    List<Matiere> findByDepartementId(Integer depId);
+
+    List<Matiere> findByUniteSigle(Integer uniteId, String sigle);
+
+    List<Matiere> findByUniteId(Integer uniteId);
 }

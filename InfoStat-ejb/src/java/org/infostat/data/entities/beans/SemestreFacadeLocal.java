@@ -28,5 +28,10 @@ public interface SemestreFacadeLocal {
     List<Semestre> findRange(int[] range);
 
     int count();
-    
+
+    List<Semestre> findByAnnee(Integer nId);
+
+    List<Semestre> findByAnneeSigle(Integer nId, String sigle);
+
+    List<Semestre> findByDepartement(Integer nId);
 }

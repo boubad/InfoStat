@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -32,6 +34,17 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "DBGROUPEEVENT")
+@NamedQueries(
+        {
+    @NamedQuery(name = "GroupeEvent.findBySemestre",
+            query = "SELECT a from GroupeEvent a WHERE  a.affectationenseignant.semestre.id = :semestreid"),
+    @NamedQuery(name = "GroupeEvent.findBySemestreEnseignant",
+            query = "SELECT a from GroupeEvent a WHERE  a.affectationenseignant.semestre.id = :semestreid AND a.affectationenseignant.enseignant.id = :enseignantid"),
+    @NamedQuery(name = "GroupeEvent.findBySemestreEnseignantMatiere",
+            query = "SELECT a from GroupeEvent a WHERE a.affectationenseignant.semestre.id = :semestreid AND a.affectationenseignant.enseignant.id = :enseignantid AND a.affectationenseignant.matiere.id = :matiereid"),
+    @NamedQuery(name = "GroupeEvent.findBySemestreEnseignantMatiereGroupe",
+            query = "SELECT a from GroupeEvent a WHERE a.affectationenseignant.semestre.id = :semestreid AND a.affectationenseignant.enseignant.id = :enseignantid AND a.affectationenseignant.matiere.id = :matiereid AND a.affectationenseignant.groupe.id = :groupeid")
+})
 @XmlRootElement
 public class GroupeEvent implements Serializable {
 
@@ -54,7 +67,7 @@ public class GroupeEvent implements Serializable {
     @NotNull
     @Column(name = "DDATE", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date date = new Date();
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
@@ -62,10 +75,10 @@ public class GroupeEvent implements Serializable {
     private String nom;
     @Temporal(TemporalType.TIME)
     @Column(name = "TSTART")
-    private Date starttime;
+    private Date starttime =  new Date();
     @Temporal(TemporalType.TIME)
     @Column(name = "TEND")
-    private Date endtime;
+    private Date endtime = new Date();
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(precision = 23)
     private Float coefficient;
@@ -80,7 +93,7 @@ public class GroupeEvent implements Serializable {
     @JoinColumn(name = "AFFPROFID", referencedColumnName = "AFFPROFID", nullable = false)
     @ManyToOne(optional = false)
     private AffectationEnseignant affectationenseignant;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupevent",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupevent", orphanRemoval = true)
     private Collection<EtudiantEvent> etudiantevents;
 
     public GroupeEvent() {

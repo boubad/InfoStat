@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -29,6 +31,13 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "DBUNITE")
+@NamedQueries(
+        {
+    @NamedQuery(name = "Unite.findByDepartement",
+            query = "SELECT a from Unite a WHERE  a.departement.id = :id"),
+    @NamedQuery(name = "Unite.findByDepartementSigle",
+            query = "SELECT a from Unite a WHERE  a.departement.id = :id AND a.sigle = :sigle")
+})
 @XmlRootElement
 public class Unite implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -39,6 +48,7 @@ public class Unite implements Serializable {
     @Column(name = "UNITEID", nullable = false)
     private Long id;
     @Version
+    @Column(name="OPTLOCK")
     private Integer version;
     @Basic(optional = false)
     @NotNull

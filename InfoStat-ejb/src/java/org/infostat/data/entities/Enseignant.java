@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -28,6 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "DBPROF")
+@NamedQueries(
+        @NamedQuery(name = "Enseignant.findByUsername",
+        query = "SELECT a from Enseignant a WHERE  a.username = :username"))
 @XmlRootElement
 public class Enseignant implements Serializable {
 
@@ -67,7 +72,7 @@ public class Enseignant implements Serializable {
     private String description;
     @Lob
     private byte[] photodata;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enseignant",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enseignant", orphanRemoval = true)
     private Collection<AffectationEnseignant> affectationenseignants;
 
     public Enseignant() {

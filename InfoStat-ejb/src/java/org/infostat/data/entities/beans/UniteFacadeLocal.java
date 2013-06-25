@@ -28,5 +28,8 @@ public interface UniteFacadeLocal {
     List<Unite> findRange(int[] range);
 
     int count();
-    
+
+    List<Unite> findByDepartementId(Integer depId);
+
+    List<Unite> findByDepartementSigle(Integer depId, String sigle);
 }

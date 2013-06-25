@@ -29,5 +29,5 @@ public interface DepartementFacadeLocal {
 
     int count();
 
-    Departement findBySigle(String sigle);
+    List<Departement> findBySigle(String sigle);
 }

@@ -28,5 +28,15 @@ public interface AffectationEnseignantFacadeLocal {
     List<AffectationEnseignant> findRange(int[] range);
 
     int count();
-    
+
+    List<AffectationEnseignant> findBySemestre(Integer semestreid);
+
+    List<AffectationEnseignant> findBySemestreEnseignant(Integer semestreid, Integer enseignantid);
+
+    List<AffectationEnseignant> findBySemestreMatiere(Integer semestreid, Integer matiereid);
+
+    List<AffectationEnseignant> findBySemestreGroupe(Integer semestreid, Integer groupeid);
+
+    List<AffectationEnseignant> findBySemestreEnseignantMatiereGroupe(Integer semestreid,
+            Integer enseignantid, Integer matiereid, Integer groupeid);
 }

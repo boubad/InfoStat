@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -34,6 +36,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "DBSEMESTRE", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"ANNEEID", "SIGLE"})})
+@NamedQueries(
+        {
+    @NamedQuery(name = "Semestre.findByAnnee",
+            query = "SELECT a from Semestre a WHERE  a.annee.id = :id"),
+    @NamedQuery(name = "Semestre.findByAnneeSigle",
+            query = "SELECT a from Semestre a WHERE  a.annee.id = :id AND a.sigle = :sigle"),
+    @NamedQuery(name = "Semestre.findByDepartement",
+            query = "SELECT a from Semestre a WHERE  a.annee.departement.id = :id")
+})
 @XmlRootElement
 public class Semestre implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -50,12 +61,12 @@ public class Semestre implements Serializable {
     @NotNull
     @Column(name = "DSTART", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date startdate;
+    private Date startdate = new Date();
     @Basic(optional = false)
     @NotNull
     @Column(name = "DEND", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date enddate;
+    private Date enddate = new Date();
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)

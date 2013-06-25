@@ -7,20 +7,28 @@ package org.infostat.data.beans;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import org.infostat.data.dto.AffectationEnseignantDTO;
+import org.infostat.data.dto.AffectationEtudiantDTO;
 import org.infostat.data.dto.AnneeDTO;
 import org.infostat.data.dto.DateDTO;
 import org.infostat.data.dto.DepartementDTO;
 import org.infostat.data.dto.EnseignantDTO;
 import org.infostat.data.dto.EtudiantDTO;
+import org.infostat.data.dto.EtudiantEventDTO;
 import org.infostat.data.dto.GroupeDTO;
+import org.infostat.data.dto.GroupeEventDTO;
 import org.infostat.data.dto.MatiereDTO;
 import org.infostat.data.dto.SemestreDTO;
 import org.infostat.data.dto.UniteDTO;
+import org.infostat.data.entities.AffectationEnseignant;
+import org.infostat.data.entities.AffectationEtudiant;
 import org.infostat.data.entities.Annee;
 import org.infostat.data.entities.Departement;
 import org.infostat.data.entities.Enseignant;
 import org.infostat.data.entities.Etudiant;
+import org.infostat.data.entities.EtudiantEvent;
 import org.infostat.data.entities.Groupe;
+import org.infostat.data.entities.GroupeEvent;
 import org.infostat.data.entities.Matiere;
 import org.infostat.data.entities.Semestre;
 import org.infostat.data.entities.Unite;
@@ -30,12 +38,12 @@ import org.infostat.data.entities.Unite;
  * @author boubad
  */
 public class BaseDataBean implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public BaseDataBean() {
     }
-    
+
     public Date convertDate(DateDTO p) {
         Date pRet = null;
         if (p != null) {
@@ -151,7 +159,7 @@ public class BaseDataBean implements Serializable {
         }
         return pRet;
     }
-    
+
     public SemestreDTO convertSemestre(Semestre p) {
         SemestreDTO pRet = null;
         if (p != null) {
@@ -167,7 +175,7 @@ public class BaseDataBean implements Serializable {
         }
         return pRet;
     }
-    
+
     public Unite convertUnite(UniteDTO p) {
         Unite pRet = null;
         if (p != null) {
@@ -356,6 +364,166 @@ public class BaseDataBean implements Serializable {
             pRet.setRedoublant(p.getRedoublant());
             pRet.setSeriebac(p.getSeriebac());
             pRet.setVille(p.getVille());
+        }
+        return pRet;
+    }
+
+    public AffectationEnseignant convertAffectationEnseignant(AffectationEnseignantDTO p) {
+        AffectationEnseignant pRet = null;
+        if (p != null) {
+            pRet = new AffectationEnseignant();
+            if (p.getId() != null) {
+                pRet.setId(new Long(p.getId().longValue()));
+            }
+            Semestre pSem = new Semestre();
+            Matiere pMat = new Matiere();
+            Groupe pGroupe = new Groupe();
+            Enseignant prof = new Enseignant();
+            if (p.getSemestreid() != null) {
+                pSem.setId(new Long(p.getSemestreid().longValue()));
+            }
+            if (p.getEnseignantid() != null) {
+                prof.setId(new Long(p.getEnseignantid().longValue()));
+            }
+            if (p.getMatiereid() != null) {
+                pMat.setId(new Long(p.getMatiereid().longValue()));
+            }
+            if (p.getGroupeid() != null) {
+                pGroupe.setId(new Long(p.getGroupeid().longValue()));
+            }
+            pRet.setSemestre(pSem);
+            pRet.setEnseignant(prof);
+            pRet.setMatiere(pMat);
+            pRet.setGroupe(pGroupe);
+        }
+        return pRet;
+    }
+
+    public AffectationEnseignantDTO convertAffectationEnseignant(AffectationEnseignant p) {
+        AffectationEnseignantDTO pRet = null;
+        if (p != null) {
+            pRet.setId(p.getId().intValue());
+            pRet.setVersion(p.getVersion());
+            pRet.setEnseignantid(p.getEnseignant().getId().intValue());
+            pRet.setGroupeid(p.getGroupe().getId().intValue());
+            pRet.setMatiereid(p.getMatiere().getId().intValue());
+            pRet.setSemestreid(p.getSemestre().getId().intValue());
+        }
+        return pRet;
+    }
+
+    public AffectationEtudiant convertAffectationEtudiant(AffectationEtudiantDTO p) {
+        AffectationEtudiant pRet = null;
+        if (p != null) {
+            pRet = new AffectationEtudiant();
+            if (p.getId() != null) {
+                pRet.setId(new Long(p.getId().longValue()));
+            }
+            Semestre pSem = new Semestre();
+            Groupe pGroupe = new Groupe();
+            Etudiant etud = new Etudiant();
+            if (p.getSemestreid() != null) {
+                pSem.setId(new Long(p.getSemestreid().longValue()));
+            }
+            if (p.getEtudiantid() != null) {
+                etud.setId(new Long(p.getEtudiantid().longValue()));
+            }
+            if (p.getGroupeid() != null) {
+                pGroupe.setId(new Long(p.getGroupeid().longValue()));
+            }
+            pRet.setSemestre(pSem);
+            pRet.setEtudiant(etud);
+            pRet.setGroupe(pGroupe);
+        }
+        return pRet;
+    }
+
+    public AffectationEtudiantDTO convertAffectationEtudiant(AffectationEtudiant p) {
+        AffectationEtudiantDTO pRet = null;
+        if (p != null) {
+            pRet.setId(p.getId().intValue());
+            pRet.setVersion(p.getVersion());
+            pRet.setEtudiantid(p.getEtudiant().getId().intValue());
+            pRet.setGroupeid(p.getGroupe().getId().intValue());
+            pRet.setSemestreid(p.getSemestre().getId().intValue());
+        }
+        return pRet;
+    }
+
+    public GroupeEvent convertGroupeEvent(GroupeEventDTO p) {
+        GroupeEvent pRet = null;
+        if (p != null) {
+            pRet = new GroupeEvent();
+            AffectationEnseignant aff = new AffectationEnseignant();
+            if (p.getAffectationenseignantid() != null) {
+                aff.setId(new Long(p.getAffectationenseignantid().longValue()));
+            }
+            pRet.setAffectationenseignant(aff);
+            pRet.setCoefficient(p.getCoefficient());
+            pRet.setDate(convertDate(p.getDate()));
+            pRet.setDescription(p.getDescription());
+            pRet.setEndtime(convertDate(p.getEndtime()));
+            pRet.setGenre(p.getGenre());
+            pRet.setLocation(p.getLocation());
+            pRet.setNom(p.getNom());
+            pRet.setStarttime(convertDate(p.getStarttime()));
+            pRet.setStatus(p.getStatus());
+        }
+        return pRet;
+    }
+
+    public GroupeEventDTO convertGroupeEvent(GroupeEvent p) {
+        GroupeEventDTO pRet = null;
+        if (p != null) {
+            pRet = new GroupeEventDTO();
+            pRet.setId(new Integer(p.getId().intValue()));
+            pRet.setVersion(p.getVersion());
+            pRet.setAffectationenseignantid(new Integer(p.getAffectationenseignant().getId().intValue()));
+            pRet.setCoefficient(p.getCoefficient());
+            pRet.setDate(convertDate(p.getDate()));
+            pRet.setDescription(p.getDescription());
+            pRet.setEndtime(convertDate(p.getEndtime()));
+            pRet.setGenre(p.getGenre());
+            pRet.setLocation(p.getLocation());
+            pRet.setNom(p.getNom());
+            pRet.setStarttime(convertDate(p.getStarttime()));
+            pRet.setStatus(p.getStatus());
+        }
+        return pRet;
+    }
+
+    public EtudiantEvent convertEtudiantEvent(EtudiantEventDTO p) {
+        EtudiantEvent pRet = null;
+        if (p != null) {
+            pRet = new EtudiantEvent();
+            GroupeEvent aff = new GroupeEvent();
+            if (p.getGroupeventid() != null) {
+                aff.setId(new Long(p.getGroupeventid().longValue()));
+            }
+            pRet.setGroupevent(aff);
+            Etudiant etud = new Etudiant();
+            if (p.getEtudiantid() != null) {
+                etud.setId(new Long(p.getEtudiantid().longValue()));
+            }
+            pRet.setEtudiant(etud);
+            pRet.setGenre(p.getGenre());
+            pRet.setNote(p.getNote());
+            pRet.setObservations(p.getObservations());
+        }
+        return pRet;
+    }
+
+    public EtudiantEventDTO convertEtudiantEvent(EtudiantEvent p) {
+        EtudiantEventDTO pRet = null;
+        if (p != null) {
+            pRet = new EtudiantEventDTO();
+            pRet.setId(new Integer(p.getId().intValue()));
+            pRet.setVersion(p.getVersion());
+            pRet.setGroupeventid(new Integer(p.getGroupevent().getId().intValue()));
+            pRet.setEtudiantid(new Integer(p.getEtudiant().getId().intValue()));
+            pRet.setGenre(p.getGenre());
+            pRet.setNote(p.getNote());
+            pRet.setObservations(p.getObservations());
         }
         return pRet;
     }

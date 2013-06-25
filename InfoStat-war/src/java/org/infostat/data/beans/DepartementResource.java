@@ -16,6 +16,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import org.infostat.data.dto.DepartementDTO;
 import org.infostat.data.entities.Departement;
 import org.infostat.data.entities.beans.DepartementFacadeLocal;
@@ -66,12 +67,18 @@ public class DepartementResource extends BaseDataBean {
         Departement p = departementFacade.find(id);
         return convertDepartement(p);
     }
+
     @GET
     @Produces({"application/xml", "application/json"})
-    @Path("sigle/{sigle}")
-    public DepartementDTO findBySigle(@PathParam("sigle") String sigle) {
-        Departement p = departementFacade.findBySigle(sigle);
-        return convertDepartement(p);
+    @Path("user")
+    public List<DepartementDTO> findBySigle(@QueryParam("sigle") String sigle) {
+        List<Departement> oList = departementFacade.findBySigle(sigle);
+        List<DepartementDTO> oRet = new ArrayList<DepartementDTO>();
+        for (Departement p : oList) {
+            DepartementDTO pp = convertDepartement(p);
+            oRet.add(pp);
+        }
+        return oRet;
     }
 
     @GET
@@ -102,7 +109,7 @@ public class DepartementResource extends BaseDataBean {
     @GET
     @Path("count")
     @Produces({"text/plain", "application/xml", "application/json"})
-    public String countREST() {
+    public String count() {
         int nRet = departementFacade.count();
         return String.valueOf(nRet);
         //return String.valueOf(super.count());

@@ -5,6 +5,7 @@
 package org.infostat.data.entities.beans;
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,15 +35,11 @@ public class DepartementFacade extends AbstractFacade<Departement> implements De
     }
 
     @Override
-    public Departement findBySigle(String sigle) {
+    public List<Departement> findBySigle(String sigle) {
         EntityManager e = getEntityManager();
         Query q = e.createNamedQuery("Departement.findBySigle");
         q.setParameter("sigle", sigle);
-        try {
-            return (Departement) q.getSingleResult();
-        } catch (Exception ex) {
-            return null;
-        }
+        return q.getResultList();
     }
 
     @Override
@@ -55,7 +52,7 @@ public class DepartementFacade extends AbstractFacade<Departement> implements De
 
     @Override
     public void edit(Departement entity) {
-        Departement p = em.find(Departement.class, entity.getId());
+        Departement p = em.find(Departement.class, new Long(entity.getId().longValue()));
         p.setSigle(entity.getSigle());
         p.setNom(entity.getNom());
         p.setStatus(entity.getStatus());
@@ -66,7 +63,7 @@ public class DepartementFacade extends AbstractFacade<Departement> implements De
 
     @Override
     public void remove(Departement entity) {
-        Departement p = em.find(Departement.class, entity.getId());
+        Departement p = em.find(Departement.class, new Long(entity.getId().longValue()));
         super.remove(p); //To change body of generated methods, choose Tools | Templates.
     }
 }

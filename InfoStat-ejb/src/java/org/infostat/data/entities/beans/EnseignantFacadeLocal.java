@@ -28,5 +28,6 @@ public interface EnseignantFacadeLocal {
     List<Enseignant> findRange(int[] range);
 
     int count();
-    
+
+    List<Enseignant> findByUsername(String username);
 }

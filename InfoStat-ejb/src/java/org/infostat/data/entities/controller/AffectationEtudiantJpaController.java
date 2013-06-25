@@ -63,7 +63,7 @@ public class AffectationEtudiantJpaController implements Serializable {
                 semestre = em.merge(semestre);
             }
             if (groupe != null) {
-                groupe.getAffectationEtudiantCollection().add(affectationEtudiant);
+                groupe.getAffectationEtudiants().add(affectationEtudiant);
                 groupe = em.merge(groupe);
             }
             if (etudiant != null) {
@@ -119,11 +119,11 @@ public class AffectationEtudiantJpaController implements Serializable {
                 semestreNew = em.merge(semestreNew);
             }
             if (groupeOld != null && !groupeOld.equals(groupeNew)) {
-                groupeOld.getAffectationEtudiantCollection().remove(affectationEtudiant);
+                groupeOld.getAffectationEtudiants().remove(affectationEtudiant);
                 groupeOld = em.merge(groupeOld);
             }
             if (groupeNew != null && !groupeNew.equals(groupeOld)) {
-                groupeNew.getAffectationEtudiantCollection().add(affectationEtudiant);
+                groupeNew.getAffectationEtudiants().add(affectationEtudiant);
                 groupeNew = em.merge(groupeNew);
             }
             if (etudiantOld != null && !etudiantOld.equals(etudiantNew)) {
@@ -175,7 +175,7 @@ public class AffectationEtudiantJpaController implements Serializable {
             }
             Groupe groupe = affectationEtudiant.getGroupe();
             if (groupe != null) {
-                groupe.getAffectationEtudiantCollection().remove(affectationEtudiant);
+                groupe.getAffectationEtudiants().remove(affectationEtudiant);
                 groupe = em.merge(groupe);
             }
             Etudiant etudiant = affectationEtudiant.getEtudiant();

@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -24,17 +26,29 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "DBAFFETUD")
+@NamedQueries(
+        {
+    @NamedQuery(name = "AffectationEtudiant.findBySemestre",
+            query = "SELECT a from AffectationEtudiant a WHERE  a.semestre.id = :semestreid"),
+    @NamedQuery(name = "AffectationEtudiant.findBySemestreEtudiant",
+            query = "SELECT a from AffectationEtudiant a WHERE  a.semestre.id = :semestreid AND a.etudiant.id = :etudiantid"),
+    @NamedQuery(name = "AffectationEtudiant.findBySemestreGroupe",
+            query = "SELECT a from AffectationEtudiant a WHERE  a.semestre.id = :semestreid AND a.groupe.id = :groupeid"),
+    @NamedQuery(name = "AffectationEtudiant.findBySemestreEtudiantGroupe",
+            query = "SELECT a from AffectationEtudiant a WHERE  a.semestre.id = :semestreid AND a.etudiant.id = :etudiantid AND a.groupe.id = :groupeid")
+})
 @XmlRootElement
 public class AffectationEtudiant implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @NotNull
-    @Column(name="AFFETUDID",nullable = false)
+    @Column(name = "AFFETUDID", nullable = false)
     private Long id;
     @Version
-    @Column(name="OPTLOCK")
+    @Column(name = "OPTLOCK")
     private Integer version;
     @JoinColumn(name = "SEMESTREID", referencedColumnName = "SEMESTREID", nullable = false)
     @ManyToOne(optional = false)
@@ -117,5 +131,4 @@ public class AffectationEtudiant implements Serializable {
     public String toString() {
         return "org.infostat.data.entities.AffectationEtudiant[ affetudid=" + id + " ]";
     }
-    
 }

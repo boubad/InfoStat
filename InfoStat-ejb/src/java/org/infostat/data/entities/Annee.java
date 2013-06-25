@@ -58,12 +58,12 @@ public class Annee implements Serializable {
     @NotNull
     @Column(name="DSTART",nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date startdate;
+    private Date startdate = new Date();
     @Basic(optional = false)
     @NotNull
     @Column(name="DEND",nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date enddate;
+    private Date enddate = new Date();
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)

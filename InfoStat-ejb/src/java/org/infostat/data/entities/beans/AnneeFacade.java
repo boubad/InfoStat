@@ -36,7 +36,8 @@ public class AnneeFacade extends AbstractFacade<Annee> implements AnneeFacadeLoc
 
     @Override
     public void create(Annee entity) {
-        Departement dep =em.getReference(Departement.class, entity.getDepartement().getId());
+        Departement dep =em.find(Departement.class, 
+                new Long(entity.getDepartement().getId().longValue()));
         entity.setDepartement(dep);
         entity.setSemestres(new ArrayList<Semestre>());
         Date d1 = entity.getStartdate();
@@ -76,7 +77,7 @@ public class AnneeFacade extends AbstractFacade<Annee> implements AnneeFacadeLoc
         cal2.set(Calendar.SECOND, 0);
         cal2.set(Calendar.MILLISECOND, 0);
         entity.setEnddate(cal2.getTime());
-        Annee p = em.getReference(Annee.class, entity.getId());
+        Annee p = em.find(Annee.class, entity.getId());
         p.setDescription(entity.getDescription());
         p.setEnddate(entity.getEnddate());
         p.setSigle(entity.getSigle());
@@ -87,7 +88,7 @@ public class AnneeFacade extends AbstractFacade<Annee> implements AnneeFacadeLoc
 
     @Override
     public void remove(Annee entity) {
-         Annee p = em.getReference(Annee.class, entity.getId());
+         Annee p = em.find(Annee.class, entity.getId());
         super.remove(p); //To change body of generated methods, choose Tools | Templates.
     }
     

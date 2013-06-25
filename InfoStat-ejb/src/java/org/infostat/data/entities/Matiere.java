@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -29,6 +31,15 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "DBMATIERE")
+@NamedQueries(
+        {
+    @NamedQuery(name = "Matiere.findByUnite",
+            query = "SELECT a from Matiere a WHERE  a.unite.id = :id"),
+    @NamedQuery(name = "Matiere.findByUniteSigle",
+            query = "SELECT a from Matiere a WHERE  a.unite.id = :id AND a.sigle = :sigle"),
+    @NamedQuery(name = "Matiere.findByDepartement",
+            query = "SELECT a from Matiere a WHERE  a.unite.departement.id = :id")
+})
 @XmlRootElement
 public class Matiere implements Serializable {
 

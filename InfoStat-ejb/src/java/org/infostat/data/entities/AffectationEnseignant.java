@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -28,6 +30,19 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "DBAFFPROF")
+@NamedQueries(
+        {
+    @NamedQuery(name = "AffectationEnseignant.findBySemestre",
+            query = "SELECT a from AffectationEnseignant a WHERE  a.semestre.id = :semestreid"),
+    @NamedQuery(name = "AffectationEnseignant.findBySemestreEnseignant",
+            query = "SELECT a from AffectationEnseignant a WHERE  a.semestre.id = :semestreid AND a.enseignant.id = :enseignantid"),
+    @NamedQuery(name = "AffectationEnseignant.findBySemestreMatiere",
+            query = "SELECT a from AffectationEnseignant a WHERE  a.semestre.id = :semestreid AND a.matiere.id = :matiereid"),
+    @NamedQuery(name = "AffectationEnseignant.findBySemestreGroupe",
+            query = "SELECT a from AffectationEnseignant a WHERE  a.semestre.id = :semestreid AND a.groupe.id = :groupeid"),
+    @NamedQuery(name = "AffectationEnseignant.findBySemestreEnseignantMatiereGroupe",
+            query = "SELECT a from AffectationEnseignant a WHERE  a.semestre.id = :semestreid AND a.matiere.id = :matiereid AND a.enseignant.id = :enseignantid AND a.groupe.id = :groupeid")
+})
 @XmlRootElement
 public class AffectationEnseignant implements Serializable {
 
@@ -39,7 +54,7 @@ public class AffectationEnseignant implements Serializable {
     @Column(name = "AFFPROFID", nullable = false)
     private Long id;
     @Version
-    @Column(name="OPTLOCK")
+    @Column(name = "OPTLOCK")
     private Integer version;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
             mappedBy = "affectationenseignant")

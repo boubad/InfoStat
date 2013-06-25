@@ -36,9 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries(
         {
     @NamedQuery(name = "Groupe.findByDepartement",
-            query = "SELECT a from Groupe a WHERE  a.departement.id=:id"),
+            query = "SELECT a from Groupe a WHERE  a.departement.id = :id"),
     @NamedQuery(name = "Groupe.findByDepartementSigle",
-            query = "SELECT a from Groupe a WHERE  a.departement.id=:id ABD a.sigle=:sigle")
+            query = "SELECT a from Groupe a WHERE  a.departement.id = :id AND a.sigle =:sigle")
 })
 @XmlRootElement
 public class Groupe implements Serializable {
@@ -153,11 +153,11 @@ public class Groupe implements Serializable {
     }
 
     @XmlTransient
-    public Collection<AffectationEtudiant> getAffectationEtudiantCollection() {
+    public Collection<AffectationEtudiant> getAffectationEtudiants() {
         return affectationetudiants;
     }
 
-    public void setAffectationEtudiantCollection(Collection<AffectationEtudiant> affectationEtudiantCollection) {
+    public void setAffectationEtudiants(Collection<AffectationEtudiant> affectationEtudiantCollection) {
         this.affectationetudiants = affectationEtudiantCollection;
     }
 

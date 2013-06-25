@@ -36,7 +36,17 @@ public class ApplicationConfig extends Application {
      * resources defined in the project.
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(org.infostat.data.beans.AffectationEnseignantResource.class);
+        resources.add(org.infostat.data.beans.AffectationEtudiantResource.class);
         resources.add(org.infostat.data.beans.AnneeResource.class);
         resources.add(org.infostat.data.beans.DepartementResource.class);
+        resources.add(org.infostat.data.beans.EnseignantResource.class);
+        resources.add(org.infostat.data.beans.EtudiantEventResource.class);
+        resources.add(org.infostat.data.beans.EtudiantResource.class);
+        resources.add(org.infostat.data.beans.GroupeEventResource.class);
+        resources.add(org.infostat.data.beans.GroupeResource.class);
+        resources.add(org.infostat.data.beans.MatiereResource.class);
+        resources.add(org.infostat.data.beans.SemestreResource.class);
+        resources.add(org.infostat.data.beans.UniteResource.class);
     }
 }

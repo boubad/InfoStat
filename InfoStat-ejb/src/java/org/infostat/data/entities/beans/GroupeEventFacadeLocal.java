@@ -15,9 +15,9 @@ import org.infostat.data.entities.GroupeEvent;
 @Local
 public interface GroupeEventFacadeLocal {
 
-    void create(GroupeEvent groupeEvent);
+    void create(GroupeEvent groupeEvent,boolean bCreateNotes);
 
-    void edit(GroupeEvent groupeEvent);
+    void edit(GroupeEvent groupeEvent, boolean bCreateNotes);
 
     void remove(GroupeEvent groupeEvent);
 
@@ -28,5 +28,14 @@ public interface GroupeEventFacadeLocal {
     List<GroupeEvent> findRange(int[] range);
 
     int count();
-    
+
+    List<GroupeEvent> findBySemestre(Integer semestreid);
+
+    List<GroupeEvent> findBySemestreEnseignant(Integer semestreid, Integer enseignantid);
+
+    List<GroupeEvent> findBySemestreEnseignantMatiere(Integer semestreid,
+            Integer enseignantid, Integer matiereid);
+
+    List<GroupeEvent> findBySemestreEnseignantMatiereGroupe(Integer semestreid,
+            Integer enseignantid, Integer matiereid, Integer groupeid);
 }
