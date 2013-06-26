@@ -17,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import org.infostat.data.dto.GroupeDTO;
+import org.infostat.data.dto.GroupesList;
 import org.infostat.data.entities.Groupe;
 import org.infostat.data.entities.beans.GroupeFacadeLocal;
 
@@ -110,4 +111,33 @@ public class GroupeResource extends BaseDataBean {
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
     }
+
+    @POST
+    @Path("user")
+    @Consumes({"application/xml", "application/json"})
+    public void maintains(GroupesList oList) {
+        if (oList != null) {
+            String mode = oList.getOperation();
+            boolean bDelete = false;
+            if (mode != null) {
+                mode = mode.toLowerCase();
+                if (mode.contains("delete")) {
+                    bDelete = true;
+                }
+            }
+            List<Groupe> xList = new ArrayList<Groupe>();
+            GroupeDTO[] col = oList.getGroupes();
+            if (col != null) {
+                for (GroupeDTO p : col) {
+                    Groupe pp = convertGroupe(p);
+                    if (pp != null) {
+                        xList.add(pp);
+                    }
+                }// p
+            }// col
+            if (!xList.isEmpty()) {
+                facade.maintains(xList, bDelete);
+            }
+        }// oList
+    }// Create
 }

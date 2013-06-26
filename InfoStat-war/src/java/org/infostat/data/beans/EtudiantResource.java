@@ -20,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import org.infostat.data.dto.EtudiantDTO;
+import org.infostat.data.dto.EtudiantsList;
 import org.infostat.data.entities.Etudiant;
 import org.infostat.data.entities.beans.EtudiantFacadeLocal;
 
@@ -142,4 +143,33 @@ public class EtudiantResource extends BaseDataBean {
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
     }
+
+    @POST
+    @Path("user")
+    @Consumes({"application/xml", "application/json"})
+    public void maintains(EtudiantsList oList) {
+        if (oList != null) {
+            String mode = oList.getOperation();
+            boolean bDelete = false;
+            if (mode != null) {
+                mode = mode.toLowerCase();
+                if (mode.contains("delete")) {
+                    bDelete = true;
+                }
+            }
+            List<Etudiant> xList = new ArrayList<Etudiant>();
+            EtudiantDTO[] col = oList.getEtudiants();
+            if (col != null) {
+                for (EtudiantDTO p : col) {
+                    Etudiant pp = convertEtudiant(p);
+                    if (pp != null) {
+                        xList.add(pp);
+                    }
+                }// p
+            }// col
+            if (!xList.isEmpty()) {
+                facade.maintains(xList, bDelete);
+            }
+        }// oList
+    }// Create
 }

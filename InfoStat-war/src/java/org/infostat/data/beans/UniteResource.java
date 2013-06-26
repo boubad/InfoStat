@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.infostat.data.dto.UniteDTO;
+import org.infostat.data.dto.UnitesList;
 import org.infostat.data.entities.Unite;
 import org.infostat.data.entities.beans.UniteFacadeLocal;
 
@@ -126,4 +127,34 @@ public class UniteResource extends BaseDataBean {
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
     }
+
+    @POST
+    @Path("user")
+    @Consumes({"application/xml", "application/json"})
+    public void maintains(UnitesList oList) {
+        if (oList != null) {
+            String mode = oList.getOperation();
+            boolean bDelete = false;
+            if (mode != null) {
+                mode = mode.toLowerCase();
+                if (mode.contains("delete")) {
+                    bDelete = true;
+                }
+            }
+            List<Unite> xList = new ArrayList<Unite>();
+            UniteDTO[] col = oList.getUnites();
+            if (col != null) {
+                for (UniteDTO p : col) {
+                    Unite pp = convertUnite(p);
+                    if (pp != null) {
+                        xList.add(pp);
+                    }
+                }// p
+            }// col
+            if (!xList.isEmpty()) {
+                facade.maintains(xList, bDelete);
+            }
+        }// oList
+    }// Create
+    
 }

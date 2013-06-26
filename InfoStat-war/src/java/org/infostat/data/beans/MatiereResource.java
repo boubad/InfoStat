@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.infostat.data.dto.MatiereDTO;
+import org.infostat.data.dto.MatieresList;
 import org.infostat.data.entities.Matiere;
 import org.infostat.data.entities.beans.MatiereFacadeLocal;
 
@@ -138,4 +139,33 @@ public class MatiereResource extends BaseDataBean {
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
     }
+
+    @POST
+    @Path("user")
+    @Consumes({"application/xml", "application/json"})
+    public void maintains(MatieresList oList) {
+        if (oList != null) {
+            String mode = oList.getOperation();
+            boolean bDelete = false;
+            if (mode != null) {
+                mode = mode.toLowerCase();
+                if (mode.contains("delete")) {
+                    bDelete = true;
+                }
+            }
+            List<Matiere> xList = new ArrayList<Matiere>();
+            MatiereDTO[] col = oList.getMatieres();
+            if (col != null) {
+                for (MatiereDTO p : col) {
+                    Matiere pp = convertMatiere(p);
+                    if (pp != null) {
+                        xList.add(pp);
+                    }
+                }// p
+            }// col
+            if (!xList.isEmpty()) {
+                facade.maintains(xList, bDelete);
+            }
+        }// oList
+    }// Create
 }

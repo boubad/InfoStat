@@ -46,6 +46,7 @@ public class ApplicationConfig extends Application {
         resources.add(org.infostat.data.beans.GroupeEventResource.class);
         resources.add(org.infostat.data.beans.GroupeResource.class);
         resources.add(org.infostat.data.beans.MatiereResource.class);
+        resources.add(org.infostat.data.beans.ModuleResource.class);
         resources.add(org.infostat.data.beans.SemestreResource.class);
         resources.add(org.infostat.data.beans.UniteResource.class);
     }

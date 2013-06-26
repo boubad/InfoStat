@@ -5,6 +5,7 @@
 package org.infostat.data.entities.beans;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.infostat.data.entities.AffectationEnseignant;
 import org.infostat.data.entities.Matiere;
+import org.infostat.data.entities.Module;
 import org.infostat.data.entities.Unite;
 
 /**
@@ -38,6 +40,7 @@ public class MatiereFacade extends AbstractFacade<Matiere> implements MatiereFac
         Unite un = em.find(Unite.class, entity.getUnite().getId());
         entity.setUnite(un);
         entity.setAffectationenseignants(new ArrayList<AffectationEnseignant>());
+        entity.setModules(new ArrayList<Module>());
         super.create(entity);
     }
 
@@ -79,5 +82,66 @@ public class MatiereFacade extends AbstractFacade<Matiere> implements MatiereFac
         Query q = em.createNamedQuery("Matiere.findByUnite", Matiere.class);
         q.setParameter("id", uniteId);
         return q.getResultList();
+    }
+
+    @Override
+    public void maintains(List<Matiere> oList, boolean bDelete) {
+        if (oList == null) {
+            return;
+        }
+        HashMap<Long, Unite> oUnites = new HashMap<Long, Unite>();
+        Query q = em.createNamedQuery("Matiere.findByUniteSigle", Matiere.class);
+        for (Matiere entity : oList) {
+            if (entity != null) {
+                Matiere p = null;
+                Long nId = entity.getId();
+                if ((nId != null) && (nId.longValue() != 0)) {
+                    p = em.find(Matiere.class, nId);
+                    if (p != null) {
+                        if (bDelete) {
+                            super.remove(p);
+                        } else {
+                            this.edit(entity);
+                        }
+                        continue;
+                    }
+                }
+                if (entity.getUnite() == null) {
+                    continue;
+                }
+                Long nUniteId = entity.getUnite().getId();
+                if (nUniteId == null) {
+                    continue;
+                }
+                if (!oUnites.containsKey(nUniteId)) {
+                    Unite px = em.find(Unite.class, nUniteId);
+                    if (px == null) {
+                        continue;
+                    }
+                    oUnites.put(nUniteId, px);
+                }
+                String sigle = entity.getSigle();
+                if (sigle == null) {
+                    continue;
+                }
+                q.setParameter("id", nUniteId);
+                q.setParameter("sigle", sigle);
+                List<Matiere> ylist = q.getResultList();
+                if (!ylist.isEmpty()) {
+                    p = ylist.get(0);
+                    if (bDelete) {
+                        this.remove(p);
+                    } else {
+                        entity.setId(p.getId());
+                        this.edit(entity);
+                    }
+                } else if (!bDelete) {
+                    Unite unite = oUnites.get(nUniteId);
+                    entity.setUnite(unite);
+                    entity.setId(null);
+                    this.create(entity);
+                }
+            }// entity
+        }// entity
     }
 }

@@ -34,4 +34,6 @@ public interface MatiereFacadeLocal {
     List<Matiere> findByUniteSigle(Integer uniteId, String sigle);
 
     List<Matiere> findByUniteId(Integer uniteId);
+
+    void maintains(List<Matiere> oList, boolean bDelete);
 }

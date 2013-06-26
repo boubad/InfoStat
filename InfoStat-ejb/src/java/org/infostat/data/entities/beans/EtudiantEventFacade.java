@@ -104,9 +104,9 @@ public class EtudiantEventFacade extends AbstractFacade<EtudiantEvent> implement
                     p = em.find(EtudiantEvent.class, nId);
                     if (p != null) {
                         if (bDelete) {
-                            super.remove(p);
+                            this.remove(p);
                         } else {
-                            super.edit(entity);
+                            this.edit(entity);
                         }
                         continue;
                     }
@@ -127,7 +127,7 @@ public class EtudiantEventFacade extends AbstractFacade<EtudiantEvent> implement
                         } else {
                             p.setNote(entity.getNote());
                             p.setObservations(entity.getObservations());
-                            super.edit(p);
+                            this.edit(p);
                         }
                     } else if (!bDelete) {
                         if (!oEtuds.containsKey(nEtudId)) {

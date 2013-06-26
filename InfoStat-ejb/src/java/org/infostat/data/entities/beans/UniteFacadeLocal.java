@@ -32,4 +32,6 @@ public interface UniteFacadeLocal {
     List<Unite> findByDepartementId(Integer depId);
 
     List<Unite> findByDepartementSigle(Integer depId, String sigle);
+
+    void maintains(List<Unite> oList, boolean bDelete);
 }

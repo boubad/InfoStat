@@ -31,5 +31,7 @@ public interface GroupeFacadeLocal {
 
     List<Groupe> findByDepartementId(Integer depId);
 
-    List<Groupe> findByDepartementSigle(Integer depId,String sigle);
+    List<Groupe> findByDepartementSigle(Integer depId, String sigle);
+
+    void maintains(List<Groupe> oList, boolean bDelete);
 }

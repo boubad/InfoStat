@@ -71,4 +71,49 @@ public class EtudiantFacade extends AbstractFacade<Etudiant> implements Etudiant
         q.setParameter("firstname", firstname);
         return q.getResultList();
     }
+
+    @Override
+    public void maintains(List<Etudiant> oList, boolean bDelete) {
+        if (oList == null) {
+            return;
+        }
+        Query q = em.createNamedQuery("Etudiant.findByLastnameFirstname", Etudiant.class);
+        for (Etudiant entity : oList) {
+            if (entity != null) {
+                Etudiant p = null;
+                Long nId = entity.getId();
+                if ((nId != null) && (nId.longValue() != 0)) {
+                    p = em.find(Etudiant.class, nId);
+                    if (p != null) {
+                        if (bDelete) {
+                            super.remove(p);
+                        } else {
+                            this.edit(entity);
+                        }
+                        continue;
+                    }
+                }
+                String firstname = entity.getFirstname();
+                String lastname = entity.getLastname();
+                if ((firstname == null) || (lastname == null)) {
+                    continue;
+                }
+                q.setParameter("firstname", firstname);
+                q.setParameter("lastname", lastname);
+                List<Etudiant> ylist = q.getResultList();
+                if (!ylist.isEmpty()) {
+                    p = ylist.get(0);
+                    if (bDelete) {
+                        this.remove(p);
+                    } else {
+                        entity.setId(p.getId());
+                        this.edit(entity);
+                    }
+                } else if (!bDelete) {
+                    entity.setId(null);
+                    this.create(entity);
+                }
+            }// entity
+        }// entity
+    }
 }

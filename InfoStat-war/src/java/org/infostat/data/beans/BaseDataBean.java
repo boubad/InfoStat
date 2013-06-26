@@ -5,8 +5,8 @@
 package org.infostat.data.beans;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import org.infostat.data.dto.AffectationEnseignantDTO;
 import org.infostat.data.dto.AffectationEtudiantDTO;
 import org.infostat.data.dto.AnneeDTO;
@@ -18,6 +18,7 @@ import org.infostat.data.dto.EtudiantEventDTO;
 import org.infostat.data.dto.GroupeDTO;
 import org.infostat.data.dto.GroupeEventDTO;
 import org.infostat.data.dto.MatiereDTO;
+import org.infostat.data.dto.ModuleDTO;
 import org.infostat.data.dto.SemestreDTO;
 import org.infostat.data.dto.UniteDTO;
 import org.infostat.data.entities.AffectationEnseignant;
@@ -30,6 +31,7 @@ import org.infostat.data.entities.EtudiantEvent;
 import org.infostat.data.entities.Groupe;
 import org.infostat.data.entities.GroupeEvent;
 import org.infostat.data.entities.Matiere;
+import org.infostat.data.entities.Module;
 import org.infostat.data.entities.Semestre;
 import org.infostat.data.entities.Unite;
 
@@ -47,11 +49,7 @@ public class BaseDataBean implements Serializable {
     public Date convertDate(DateDTO p) {
         Date pRet = null;
         if (p != null) {
-            GregorianCalendar cal =
-                    (GregorianCalendar) GregorianCalendar.getInstance();
-            cal.set(p.getYear(), p.getMonth() - 1, p.getDay(),
-                    p.getHour(), p.getMinute(), p.getSecond());
-            pRet = cal.getTime();
+            pRet = p.toDate();
         }// p
         return pRet;
     }// convertDate
@@ -59,18 +57,46 @@ public class BaseDataBean implements Serializable {
     public DateDTO convertDate(Date p) {
         DateDTO pRet = null;
         if (p != null) {
-            GregorianCalendar cal =
-                    (GregorianCalendar) GregorianCalendar.getInstance();
-            cal.setTime(p);
-            pRet = new DateDTO(cal.get(GregorianCalendar.YEAR),
-                    cal.get(GregorianCalendar.MONTH + 1),
-                    cal.get(GregorianCalendar.DAY_OF_MONTH),
-                    cal.get(GregorianCalendar.HOUR),
-                    cal.get(GregorianCalendar.MINUTE),
-                    cal.get(GregorianCalendar.SECOND));
+            pRet = new DateDTO(p);
         }// p
         return pRet;
     }// convertDate
+public Module convertModule(ModuleDTO p) {
+        Module pRet = null;
+        if (p != null) {
+            pRet = new Module();
+            if (p.getId() != null) {
+                pRet.setId(new Long(p.getId()));
+            }
+            pRet.setSigle(p.getSigle());
+            pRet.setNom(p.getNom());
+            pRet.setDescription((p.getDescription()));
+        }// p
+        return pRet;
+    }// convertDepartement
+
+    public ModuleDTO convertModule(Module p) {
+        ModuleDTO pRet = null;
+        if (p != null) {
+            pRet = new ModuleDTO();
+            pRet.setId(p.getId().intValue());
+            pRet.setVersion(p.getVersion().intValue());
+            pRet.setSigle(p.getSigle());
+            pRet.setNom(p.getNom());
+            pRet.setDescription((p.getDescription()));
+             Collection<Matiere> col = p.getMatieres();
+           if (col != null){
+               int n = col.size();
+               Integer[] pp = new Integer[n];
+               int i = 0;
+               for (Matiere m : col){
+                   pp[i++] = new Integer(p.getId().intValue());
+               }
+               pRet.setMatiereids(pp);
+           }// col
+        }// p
+        return pRet;
+    }// convertDepartement
 
     public Departement convertDepartement(DepartementDTO p) {
         Departement pRet = null;
@@ -246,6 +272,16 @@ public class BaseDataBean implements Serializable {
             pRet.setDescription(p.getDescription());
             pRet.setNom(p.getNom());
             pRet.setOrder(p.getOrder());
+            Collection<Module> col = p.getModules();
+           if (col != null){
+               int n = col.size();
+               Integer[] pp = new Integer[n];
+               int i = 0;
+               for (Module m : col){
+                   pp[i++] = new Integer(p.getId().intValue());
+               }
+               pRet.setModuleids(pp);
+           }// col
         }
         return pRet;
     }

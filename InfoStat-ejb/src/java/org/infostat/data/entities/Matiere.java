@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,7 +44,6 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 @XmlRootElement
 public class Matiere implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,7 +78,11 @@ public class Matiere implements Serializable {
     @JoinColumn(name = "UNITEID", referencedColumnName = "UNITEID", nullable = false)
     @ManyToOne(optional = false)
     private Unite unite;
-
+     @JoinTable(name = "DBXMODMAT", joinColumns = {
+        @JoinColumn(name = "MATIEREID", referencedColumnName = "MATIEREID", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "MODULEID", referencedColumnName = "MODULEID", nullable = false)})
+    @ManyToMany
+    private Collection<Module> modules;
     public Matiere() {
     }
 
@@ -194,5 +199,13 @@ public class Matiere implements Serializable {
     @Override
     public String toString() {
         return "org.infostat.data.entities.Matiere[ matiereid=" + id + " ]";
+    }
+    @XmlTransient
+    public Collection<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(Collection<Module> modules) {
+        this.modules = modules;
     }
 }

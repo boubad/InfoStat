@@ -30,4 +30,6 @@ public interface EtudiantFacadeLocal {
     int count();
 
     List<Etudiant> findByLastnameFirstname(String lastname, String firstname);
+    
+    void maintains(List<Etudiant> oList, boolean bDelete);
 }
