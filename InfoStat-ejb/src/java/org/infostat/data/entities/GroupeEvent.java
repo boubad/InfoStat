@@ -36,6 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "DBGROUPEEVENT")
 @NamedQueries(
         {
+    @NamedQuery(name = "GroupeEvent.findBySemestreGroupe",
+            query = "SELECT a from GroupeEvent a WHERE  a.affectationenseignant.semestre.id = :semestreid AND a.affectationenseignant.groupe.id = :groupeid"),
     @NamedQuery(name = "GroupeEvent.findBySemestre",
             query = "SELECT a from GroupeEvent a WHERE  a.affectationenseignant.semestre.id = :semestreid"),
     @NamedQuery(name = "GroupeEvent.findBySemestreEnseignant",
@@ -75,7 +77,7 @@ public class GroupeEvent implements Serializable {
     private String nom;
     @Temporal(TemporalType.TIME)
     @Column(name = "TSTART")
-    private Date starttime =  new Date();
+    private Date starttime = new Date();
     @Temporal(TemporalType.TIME)
     @Column(name = "TEND")
     private Date endtime = new Date();

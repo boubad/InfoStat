@@ -40,10 +40,21 @@ public class GroupeEventFacade extends AbstractFacade<GroupeEvent> implements Gr
         super(GroupeEvent.class);
     }
 
-    private void checkNotes(GroupeEvent evt) {
+    @Override
+    public void checkNotes(GroupeEvent entity) {
+        Long nId = entity.getId();
+        if (nId == null) {
+            return;
+        }
+        if (nId.longValue() == 0) {
+            return;
+        }
+        GroupeEvent evt = em.find(GroupeEvent.class, nId);
+        if (evt == null){
+            return;
+        }
         String sGenre = "NOTE";
         Query qx = em.createNamedQuery("EtudiantEvent.findByEtudiantGroupeEventGenre", EtudiantEvent.class);
-        Long nId = evt.getId();
         AffectationEnseignant aff = evt.getAffectationenseignant();
         Semestre sem = aff.getSemestre();
         Groupe groupe = aff.getGroupe();
@@ -192,6 +203,14 @@ public class GroupeEventFacade extends AbstractFacade<GroupeEvent> implements Gr
         q.setParameter("semestreid", semestreid);
         q.setParameter("enseignantid", enseignantid);
         q.setParameter("matiereid", matiereid);
+        q.setParameter("groupeid", groupeid);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<GroupeEvent> findBySemestreGroupe(Integer semestreid, Integer groupeid) {
+        Query q = em.createNamedQuery("GroupeEvent.findBySemestreGroupe", GroupeEvent.class);
+        q.setParameter("semestreid", semestreid);
         q.setParameter("groupeid", groupeid);
         return q.getResultList();
     }

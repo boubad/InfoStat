@@ -15,7 +15,7 @@ import org.infostat.data.entities.GroupeEvent;
 @Local
 public interface GroupeEventFacadeLocal {
 
-    void create(GroupeEvent groupeEvent,boolean bCreateNotes);
+    void create(GroupeEvent groupeEvent, boolean bCreateNotes);
 
     void edit(GroupeEvent groupeEvent, boolean bCreateNotes);
 
@@ -38,4 +38,8 @@ public interface GroupeEventFacadeLocal {
 
     List<GroupeEvent> findBySemestreEnseignantMatiereGroupe(Integer semestreid,
             Integer enseignantid, Integer matiereid, Integer groupeid);
+
+    List<GroupeEvent> findBySemestreGroupe(Integer semestreid, Integer groupeid);
+
+    void checkNotes(GroupeEvent entity);
 }

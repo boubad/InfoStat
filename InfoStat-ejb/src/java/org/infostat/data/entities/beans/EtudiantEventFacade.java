@@ -4,6 +4,7 @@
  */
 package org.infostat.data.entities.beans;
 
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -92,21 +93,62 @@ public class EtudiantEventFacade extends AbstractFacade<EtudiantEvent> implement
         if (oList == null) {
             return;
         }
+        HashMap<Long, Etudiant> oEtuds = new HashMap<Long, Etudiant>();
+        HashMap<Long, GroupeEvent> oEvents = new HashMap<Long, GroupeEvent>();
+        Query q = em.createNamedQuery("EtudiantEvent.findByEtudiantGroupeEventGenre", EtudiantEvent.class);
         for (EtudiantEvent entity : oList) {
             if (entity != null) {
                 EtudiantEvent p = null;
                 Long nId = entity.getId();
-                if (nId != null) {
+                if ((nId != null) && (nId.longValue() != 0)) {
                     p = em.find(EtudiantEvent.class, nId);
-                }
-                if (p != null) {
-                    if (bDelete) {
-                        super.edit(entity);
-                    } else {
-                        super.remove(entity);
+                    if (p != null) {
+                        if (bDelete) {
+                            super.remove(p);
+                        } else {
+                            super.edit(entity);
+                        }
+                        continue;
                     }
-                } else {
-                    if (!bDelete) {
+                }
+                Long nEtudId = entity.getEtudiant().getId();
+                Long nevtid = entity.getGroupevent().getId();
+                String genre = entity.getGenre();
+                if ((nEtudId != null) && (nevtid != null) && (genre != null)
+                        && (nEtudId.longValue() != 0) && (nevtid.longValue() != 0)) {
+                    q.setParameter("etudiantid", nEtudId);
+                    q.setParameter("evtid", nevtid);
+                    q.setParameter("genre", genre);
+                    List<EtudiantEvent> ylist = q.getResultList();
+                    if (!ylist.isEmpty()) {
+                        p = ylist.get(0);
+                        if (bDelete) {
+                            super.remove(p);
+                        } else {
+                            p.setNote(entity.getNote());
+                            p.setObservations(entity.getObservations());
+                            super.edit(p);
+                        }
+                    } else if (!bDelete) {
+                        if (!oEtuds.containsKey(nEtudId)) {
+                            Etudiant px = em.find(Etudiant.class, nEtudId);
+                            if (px == null) {
+                                continue;
+                            }
+                            oEtuds.put(nEtudId, px);
+                        }
+                        if (!oEvents.containsKey(nevtid)) {
+                            GroupeEvent px = em.find(GroupeEvent.class, nevtid);
+                            if (px == null) {
+                                continue;
+                            }
+                            oEvents.put(nevtid, px);
+                        }
+                        Etudiant pEtud = oEtuds.get(nEtudId);
+                        GroupeEvent pEvt = oEvents.get(nevtid);
+                        entity.setId(null);
+                        entity.setEtudiant(pEtud);
+                        entity.setGroupevent(pEvt);
                         super.create(entity);
                     }
                 }

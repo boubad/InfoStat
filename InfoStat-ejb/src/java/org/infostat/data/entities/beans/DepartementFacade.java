@@ -66,4 +66,36 @@ public class DepartementFacade extends AbstractFacade<Departement> implements De
         Departement p = em.find(Departement.class, new Long(entity.getId().longValue()));
         super.remove(p); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void maintains(List<Departement> oList, boolean bDelete) {
+      if (oList == null){
+          return;
+      }
+      Query q = em.createNamedQuery("Departement.findBySigle", Departement.class);
+      for (Departement entity : oList){
+          if (entity != null){
+              Departement p = null;
+              String sigle = entity.getSigle();
+              if (sigle != null){
+                  q.setParameter("sigle", sigle);
+                  List<Departement> xlist = q.getResultList();
+                  if (!xlist.isEmpty()){
+                      p = xlist.get(0);
+                  }
+                  if (p != null){
+                      if (bDelete){
+                          super.remove(p);
+                      } else {
+                          entity.setId(p.getId());
+                          super.edit(entity);
+                      }
+                  } else {
+                      super.create(entity);
+                  }
+              }// sigle
+          }// entity
+      }// entity
+    }
+    
 }

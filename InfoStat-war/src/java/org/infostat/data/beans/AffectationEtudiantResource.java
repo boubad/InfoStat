@@ -17,6 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.infostat.data.dto.AffectationEtudiantDTO;
+import org.infostat.data.dto.AffectationEtudiantsList;
 import org.infostat.data.entities.AffectationEtudiant;
 import org.infostat.data.entities.beans.AffectationEtudiantFacadeLocal;
 
@@ -118,4 +119,33 @@ public class AffectationEtudiantResource extends BaseDataBean {
         return String.valueOf(nRet);
         //return String.valueOf(super.count());
     }
+
+    @POST
+    @Path("user")
+    @Consumes({"application/xml", "application/json"})
+    public void maintains(AffectationEtudiantsList oList) {
+        if (oList != null) {
+            String mode = oList.getOperation();
+            boolean bDelete = false;
+            if (mode != null) {
+                mode = mode.toLowerCase();
+                if (mode.contains("delete")) {
+                    bDelete = true;
+                }
+            }
+            List<AffectationEtudiant> xList = new ArrayList<AffectationEtudiant>();
+            AffectationEtudiantDTO[] col = oList.getAffectations();
+            if (col != null) {
+                for (AffectationEtudiantDTO p : col) {
+                    AffectationEtudiant pp = convertAffectationEtudiant(p);
+                    if (pp != null) {
+                        xList.add(pp);
+                    }
+                }// p
+            }// col
+            if (!xList.isEmpty()) {
+                facade.maintains(xList, bDelete);
+            }
+        }// oList
+    }// Create
 }

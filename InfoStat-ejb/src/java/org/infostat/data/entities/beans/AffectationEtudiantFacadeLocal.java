@@ -37,4 +37,6 @@ public interface AffectationEtudiantFacadeLocal {
 
     List<AffectationEtudiant> findBySemestreEtudiantGroupe(Integer semestreid,
             Integer etudiantid, Integer groupeid);
+
+    void maintains(List<AffectationEtudiant> oList, boolean bDelete);
 }

@@ -4,6 +4,7 @@
  */
 package org.infostat.data.entities.beans;
 
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,7 +12,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.infostat.data.entities.AffectationEtudiant;
 import org.infostat.data.entities.Etudiant;
+import org.infostat.data.entities.EtudiantEvent;
 import org.infostat.data.entities.Groupe;
+import org.infostat.data.entities.GroupeEvent;
 import org.infostat.data.entities.Semestre;
 
 /**
@@ -86,5 +89,77 @@ public class AffectationEtudiantFacade extends AbstractFacade<AffectationEtudian
         q.setParameter("groupeid", groupeid);
         q.setParameter("etudiantid", etudiantid);
         return q.getResultList();
+    }
+
+    @Override
+    public void maintains(List<AffectationEtudiant> oList, boolean bDelete) {
+        if (oList == null) {
+            return;
+        }
+        HashMap<Long, Etudiant> oEtuds = new HashMap<Long, Etudiant>();
+        HashMap<Long, Semestre> oSemestres = new HashMap<Long, Semestre>();
+        HashMap<Long, Groupe> oGroupes = new HashMap<Long, Groupe>();
+        Query q = em.createNamedQuery("AffectationEtudiant.findBySemestreEtudiantGroupe", AffectationEtudiant.class);
+        for (AffectationEtudiant entity : oList) {
+            if (entity != null) {
+                AffectationEtudiant p = null;
+                Long nId = entity.getId();
+                if ((nId != null) && (nId.longValue() != 0)) {
+                    p = em.find(AffectationEtudiant.class, nId);
+                    if (p != null) {
+                        if (bDelete) {
+                            super.remove(p);
+                        } 
+                        continue;
+                    }
+                }
+                Long nEtudId = entity.getEtudiant().getId();
+                Long nSemestreId = entity.getSemestre().getId();
+                Long nGroupeId = entity.getGroupe().getId();
+                if ((nEtudId != null) && (nSemestreId != null) && (nGroupeId != null)
+                        && (nEtudId.longValue() != 0) && (nSemestreId.longValue() != 0) && (nGroupeId.longValue() != 0)) {
+                    q.setParameter("semestreid", nSemestreId);
+                    q.setParameter("groupeid", nGroupeId);
+                    q.setParameter("etudiantid", nEtudId);
+                    List<AffectationEtudiant> ylist = q.getResultList();
+                    if (!ylist.isEmpty()) {
+                        p = ylist.get(0);
+                        if (bDelete) {
+                            super.remove(p);
+                        } 
+                    } else if (!bDelete) {
+                        if (!oEtuds.containsKey(nEtudId)) {
+                            Etudiant px = em.find(Etudiant.class, nEtudId);
+                            if (px == null) {
+                                continue;
+                            }
+                            oEtuds.put(nEtudId, px);
+                        }
+                        if (!oSemestres.containsKey(nSemestreId)) {
+                            Semestre px = em.find(Semestre.class, nSemestreId);
+                            if (px == null) {
+                                continue;
+                            }
+                            oSemestres.put(nSemestreId, px);
+                        }
+                        if (!oGroupes.containsKey(nGroupeId)) {
+                            Groupe px = em.find(Groupe.class, nGroupeId);
+                            if (px == null) {
+                                continue;
+                            }
+                            oGroupes.put(nGroupeId, px);
+                        }
+                        Etudiant pEtud = oEtuds.get(nEtudId);
+                        Semestre pSem = oSemestres.get(nSemestreId);
+                        Groupe pGroupe = oGroupes.get(nGroupeId);
+                        entity.setId(null);
+                        entity.setEtudiant(pEtud);
+                        entity.setSemestre(pSem);
+                        entity.setGroupe(pGroupe);
+                        super.create(entity);
+                    }
+                }
+            }// entity
+        }// entity
     }
 }

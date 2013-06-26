@@ -30,4 +30,6 @@ public interface DepartementFacadeLocal {
     int count();
 
     List<Departement> findBySigle(String sigle);
+
+    void maintains(List<Departement> oList, boolean bDelete);
 }
